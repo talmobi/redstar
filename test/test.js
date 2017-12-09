@@ -4,6 +4,7 @@ var glob = require( '../redstar.js' )
 
 test( '*', function ( t ) {
   glob( '*', function ( err, files ) {
+    t.error( err )
     t.deepEqual(
       files,
       [ 'test.js' ]
@@ -14,6 +15,8 @@ test( '*', function ( t ) {
 
 test( '**', function ( t ) {
   glob( '**', function ( err, files ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
@@ -40,6 +43,8 @@ test( '**', function ( t ) {
 
 test( '**/*   ( should have same effect as ** )', function ( t ) {
   glob( '**/*', function ( err, files ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
@@ -66,6 +71,7 @@ test( '**/*   ( should have same effect as ** )', function ( t ) {
 
 test( 'stage/*', function ( t ) {
   glob( 'stage/*', function ( err, files ) {
+    t.error( err )
     t.deepEqual(
       files.sort(),
       [
@@ -80,6 +86,7 @@ test( 'stage/*', function ( t ) {
 
 test( 'stage/**', function ( t ) {
   glob( 'stage/**', function ( err, files ) {
+    t.error( err )
     t.deepEqual(
       files.sort(),
       [
@@ -105,6 +112,10 @@ test( 'stage/**', function ( t ) {
 
 test( '**/*.js', function ( t ) {
   glob( '**/*.js', function ( err, files ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
@@ -121,6 +132,7 @@ test( '**/*.js', function ( t ) {
 
 test( 'stage/**/*.js', function ( t ) {
   glob( 'stage/**/*.js', function ( err, files ) {
+    t.error( err )
     t.deepEqual(
       files.sort(),
       [
@@ -136,6 +148,8 @@ test( 'stage/**/*.js', function ( t ) {
 
 test( '**/*.css', function ( t ) {
   glob( '**/*.css', function ( err, files ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
@@ -152,10 +166,12 @@ test( '**/*.css', function ( t ) {
 
 test( '**/stage/*.css', function ( t ) {
   glob( '**/stage/*.css', function ( err, files ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
-        'stage/foo.css',
+        'stage/foo.css'
       ].sort()
     )
     t.end()
@@ -164,6 +180,8 @@ test( '**/stage/*.css', function ( t ) {
 
 test( '**/level2*/*c*', function ( t ) {
   glob( '**/level2*/*c*', function ( err, files, dirs ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
@@ -187,6 +205,8 @@ test( '**/level2*/*c*', function ( t ) {
 
 test( '**/level2*/*', function ( t ) {
   glob( '**/level2*/*', function ( err, files, dirs ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
@@ -213,6 +233,8 @@ test( '**/level2*/*', function ( t ) {
 
 test( '**/level*a*/*', function ( t ) {
   glob( '**/level*a*/*', function ( err, files, dirs ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
@@ -240,6 +262,8 @@ test( '**/level*a*/*', function ( t ) {
 
 test( '**/level2*/', function ( t ) {
   glob( '**/level2*/', function ( err, files, dirs ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
@@ -264,6 +288,8 @@ test( '**/level2*/', function ( t ) {
 
 test( '**/stage/**/*c.css', function ( t ) {
   glob( '**/stage/**/*c.css', function ( err, files ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
@@ -276,6 +302,8 @@ test( '**/stage/**/*c.css', function ( t ) {
 
 test( '**/stage/**/*.css', function ( t ) {
   glob( '**/stage/**/*.css', function ( err, files ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
@@ -292,6 +320,8 @@ test( '**/stage/**/*.css', function ( t ) {
 
 test( '**/level1-a/**/*.css', function ( t ) {
   glob( '**/level1-a/**/*.css', function ( err, files ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
@@ -306,6 +336,8 @@ test( '**/level1-a/**/*.css', function ( t ) {
 
 test( '**/level1-a/**/*.txt', function ( t ) {
   glob( '**/level1-a/**/*.txt', function ( err, files ) {
+    t.equal( err[ 0 ].code, 'EACCES' )
+    t.equal( err[ 0 ].path, 'restricted-dir' )
     t.deepEqual(
       files.sort(),
       [
