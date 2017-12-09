@@ -8,7 +8,17 @@ function log () {
 
 function glob ( pattern, opts, callback ) {
   var filesFound = {}
+  var dirsFound = {}
   opts = opts || {}
+
+  var errors = []
+  var _dirsOnly = ( pattern[ pattern.length - 1 ] === path.sep )
+
+  var dirPattern = pattern.slice( 0, pattern.lastIndexOf( path.sep ) )
+  if ( dirPattern[ dirPattern.length - 1 ] !== path.sep ) dirPattern += path.sep
+
+  log( 'dirPattern: ' + dirPattern )
+  log( 'dirsOnly: ' + _dirsOnly )
 
   if ( typeof opts === 'function' ) {
     callback = opts
@@ -30,6 +40,7 @@ function glob ( pattern, opts, callback ) {
 
     // ignore dotfiles
     ignoreList.push( '**/.*' )
+    ignoreList.push( '.git' )
   }
 
   var MAX_DEPTH = ( opts.depth || 7 )
@@ -55,11 +66,21 @@ function glob ( pattern, opts, callback ) {
       log( callbacks + ' /  ' + callbacksFinished )
       if ( callbacks === callbacksFinished ) {
         // we're done!
-        var keys = Object.keys( filesFound )
-        log( 'finished! files found: ' + keys.length )
-        callback( null, keys )
+        var files = Object.keys( filesFound )
+        var dirs = Object.keys( dirsFound )
+
+        var err = null
+        if ( errors.length > 0 ) {
+          err = errors
+          errors.forEach( function ( e ) {
+            log( e.path + ' ' + e.err )
+          } )
+        }
+
+        log( 'finished! files found: ' + files.length )
+        callback( err, files, dirs )
       }
-    }, 100 )
+    }, 1 )
   }
 
   function add () {
@@ -75,7 +96,9 @@ function glob ( pattern, opts, callback ) {
     fs.readdir( dirpath, function ( err, files ) {
       finishCallback()
 
-      if ( err ) throw err
+      if ( err ) {
+        return errors.push( { path: dirpath, err: err } )
+      }
 
       files.forEach( function ( file ) {
         log( 'path: ' + file )
@@ -86,7 +109,9 @@ function glob ( pattern, opts, callback ) {
         fs.stat( file, function ( err, stats ) {
           finishCallback()
 
-          if ( err ) throw err
+          if ( err ) {
+            return errors.push( { path: file, err: err } )
+          }
 
           for ( var i = 0; i < ignoreList.length; i++ ) {
             var ignorePattern = ignoreList[ i ]
@@ -97,6 +122,20 @@ function glob ( pattern, opts, callback ) {
           if ( stats.isDirectory() ) {
             log( 'dir: ' + file )
 
+            var dir = file
+            if ( dir[ dir.length - 1 ] !== path.sep ) dir += path.sep
+
+            var matches = minimatch( dir, dirPattern )
+
+            if ( matches ) {
+              dirsFound[ file ] = file
+              log( 'found dir match: ' + file )
+
+              if ( _dirsOnly ) {
+                filesFound[ file ] = file
+              }
+            }
+
             // TODO yolo level deeper
             if ( globstar ) {
               if ( depth < MAX_DEPTH ) {
@@ -106,9 +145,12 @@ function glob ( pattern, opts, callback ) {
               }
             }
           } else if ( stats.isFile() ) {
+            if ( _dirsOnly ) return
+
             log( 'file: ' + file )
 
             var matches = minimatch( file, pattern )
+
             if ( matches ) {
               filesFound[ file ] = file
               log( 'found match: ' + file )
