@@ -7,6 +7,7 @@
     "redstar.js"
   ],
   "scripts": {
+    "lint": "spacestandard --fix **/*.js",
     "test": "cd test && node test.js | faucet"
   },
   "keywords": [
