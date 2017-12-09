@@ -1,6 +1,6 @@
 {
   "name": "redstar",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "quick and dirty file globber ( quicker but dirtier than 'glob' )",
   "main": "redstar.js",
   "files": [
