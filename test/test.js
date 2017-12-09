@@ -150,6 +150,160 @@ test( '**/*.css', function ( t ) {
   } )
 } )
 
+test( '**/stage/*.css', function ( t ) {
+  glob( '**/stage/*.css', function ( err, files ) {
+    t.deepEqual(
+      files.sort(),
+      [
+        'stage/foo.css',
+      ].sort()
+    )
+    t.end()
+  } )
+} )
+
+test( '**/level2*/*c*', function ( t ) {
+  glob( '**/level2*/*c*', function ( err, files, dirs ) {
+    t.deepEqual(
+      files.sort(),
+      [
+        'stage/level1-a/level2-a/foo2a.css',
+        'stage/level1-a/level2-c/foo2c.css'
+      ].sort()
+    )
+
+    t.deepEqual(
+      dirs.sort(),
+      [
+        'stage/level1-a/level2-a',
+        'stage/level1-a/level2-b',
+        'stage/level1-a/level2-c'
+      ].sort()
+    )
+
+    t.end()
+  } )
+} )
+
+test( '**/level2*/*', function ( t ) {
+  glob( '**/level2*/*', function ( err, files, dirs ) {
+    t.deepEqual(
+      files.sort(),
+      [
+        'stage/level1-a/level2-a/foo2a.css',
+        'stage/level1-a/level2-a/foo2a.js',
+        'stage/level1-a/level2-a/foo2a.txt',
+        'stage/level1-a/level2-b/foo2b.txt',
+        'stage/level1-a/level2-c/foo2c.css'
+      ].sort()
+    )
+
+    t.deepEqual(
+      dirs.sort(),
+      [
+        'stage/level1-a/level2-a',
+        'stage/level1-a/level2-b',
+        'stage/level1-a/level2-c'
+      ].sort()
+    )
+
+    t.end()
+  } )
+} )
+
+test( '**/level*a*/*', function ( t ) {
+  glob( '**/level*a*/*', function ( err, files, dirs ) {
+    t.deepEqual(
+      files.sort(),
+      [
+        'stage/level1-a/foo1a.css',
+        'stage/level1-a/foo1a.js',
+        'stage/level1-a/foo1a.txt',
+        'stage/level1-a/level2-a/foo2a.js',
+        'stage/level1-a/level2-a/foo2a.css',
+        'stage/level1-a/level2-a/foo2a.txt'
+      ].sort()
+    )
+
+    t.deepEqual(
+      dirs.sort(),
+      [
+        'stage/level1-a',
+        'stage/levela',
+        'stage/level1-a/level2-a'
+      ].sort()
+    )
+
+    t.end()
+  } )
+} )
+
+test( '**/level2*/', function ( t ) {
+  glob( '**/level2*/', function ( err, files, dirs ) {
+    t.deepEqual(
+      files.sort(),
+      [
+        'stage/level1-a/level2-a',
+        'stage/level1-a/level2-b',
+        'stage/level1-a/level2-c'
+      ].sort()
+    )
+
+    t.deepEqual(
+      dirs.sort(),
+      [
+        'stage/level1-a/level2-a',
+        'stage/level1-a/level2-b',
+        'stage/level1-a/level2-c'
+      ].sort()
+    )
+
+    t.end()
+  } )
+} )
+
+test( '**/stage/**/*c.css', function ( t ) {
+  glob( '**/stage/**/*c.css', function ( err, files ) {
+    t.deepEqual(
+      files.sort(),
+      [
+        'stage/level1-a/level2-c/foo2c.css'
+      ].sort()
+    )
+    t.end()
+  } )
+} )
+
+test( '**/stage/**/*.css', function ( t ) {
+  glob( '**/stage/**/*.css', function ( err, files ) {
+    t.deepEqual(
+      files.sort(),
+      [
+        'stage/foo.css',
+        'stage/level1-a/foo1a.css',
+        'stage/level1-b/foo1a.css',
+        'stage/level1-a/level2-a/foo2a.css',
+        'stage/level1-a/level2-c/foo2c.css'
+      ].sort()
+    )
+    t.end()
+  } )
+} )
+
+test( '**/level1-a/**/*.css', function ( t ) {
+  glob( '**/level1-a/**/*.css', function ( err, files ) {
+    t.deepEqual(
+      files.sort(),
+      [
+        'stage/level1-a/foo1a.css',
+        'stage/level1-a/level2-a/foo2a.css',
+        'stage/level1-a/level2-c/foo2c.css'
+      ].sort()
+    )
+    t.end()
+  } )
+} )
+
 test( '**/level1-a/**/*.txt', function ( t ) {
   glob( '**/level1-a/**/*.txt', function ( err, files ) {
     t.deepEqual(
