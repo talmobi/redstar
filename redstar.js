@@ -73,7 +73,7 @@ function glob ( pattern, opts, callback ) {
         if ( errors.length > 0 ) {
           err = errors
           errors.forEach( function ( e ) {
-            log( e.path + ' ' + e.err )
+            log( e )
           } )
         }
 
@@ -97,7 +97,7 @@ function glob ( pattern, opts, callback ) {
       finishCallback()
 
       if ( err ) {
-        return errors.push( { path: dirpath, err: err } )
+        return errors.push( err )
       }
 
       files.forEach( function ( file ) {
