@@ -1,6 +1,10 @@
-#  redstar - simple file globber
+[![npm](https://img.shields.io/npm/v/redstar.svg?maxAge=3600&style=flat-square)](https://www.npmjs.com/package/redstar)
+[![npm](https://img.shields.io/npm/l/redstar.svg?maxAge=3600&style=flat-square)](https://github.com/talmobi/redstar/blob/master/LICENSE)
 
-## Simple to use
+#  redstar 💥
+basic file globber
+
+## Easy to use
 ```js
 var glob = require( 'redstar' )
 glob( 'src/**/*.js', function ( err, files, dirs ) {
@@ -23,19 +27,19 @@ glob( 'src/**/*.js', function ( err, files, dirs ) {
 } )
 ```
 
-# About
+## About
 Simple globber. Ignores `**/node_modules/**`, `**.git/**` and `.hidden` files by default.
 
-# Why
-Lightweight quick and easy -- had some trouble/slowness with other popular glob modules.
+## Why
+Small, quick, and easy -- had some inconsistency problems using other popular alternatives.
 
-# How
-fs.readdir and minimist.
+## How
+fs.readdir and [minimatch](https://github.com/isaacs/minimatch).
 
-# Alternatives
-[node-glob](https://github.com/isaacs/node-glob#glob)
+## Alternatives
+[node-glob](https://github.com/isaacs/node-glob)
 
-# Test
+## Test
 ```bash
 npm test
 ```
